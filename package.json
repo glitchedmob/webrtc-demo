@@ -18,7 +18,6 @@
   "homepage": "https://github.com/glitchedmob/webrtc-demo#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "http-server": "^0.11.1",
     "socket.io": "^2.1.1"
   }
 }
