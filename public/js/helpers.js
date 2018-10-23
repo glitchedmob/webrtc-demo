@@ -40,7 +40,6 @@ function getWebcam(constraintsObj) {
  * @param {HTMLElement} videoEl Reference to a video tag in the DOM
  */
 function attachStreamToVideo(stream, videoEl) {
-    console.log({stream, videoEl});
     // Older browsers may not have srcObject
     if ('srcObject' in videoEl) {
         videoEl.srcObject = stream;

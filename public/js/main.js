@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let webcamStream = null;
 
+
     window.getWebcam({ video: true, audio: false }).then(stream => {
         webcamStream = stream;
         window.attachStreamToVideo(stream, localVideo);
