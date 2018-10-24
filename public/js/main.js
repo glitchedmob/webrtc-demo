@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const remoteVideo = document.querySelector('#remote');
     const localVideo = document.querySelector('#local');
-    const startCall = document.querySelector('#start-call');
+    const startCallButton = document.querySelector('#start-call');
 
     let webcamStream = null;
 
@@ -15,12 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let callAnswered = false;
 
-    startCall.addEventListener('click', event => {
+    startCallButton.addEventListener('click', startCall);
+
+    function startCall() {
         const peer1 = new window.SimplePeer({ initiator: true, stream: webcamStream, trickle: false, });
 
         peer1.on('signal', sdp => {
             if (callAnswered) return;
-            console.log('peer1 sdp');
             socket.emit('startCall', JSON.stringify(sdp));
         });
 
@@ -30,28 +31,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         peer1.on('stream', stream => {
-            console.log('caller received stream');
             window.attachStreamToVideo(stream, remoteVideo);
-        })
-    });
+        });
+    }
 
-
-    socket.on('callStarted', remoteSdp => {
-        startCall.style.display = 'none';
+    function answerCall(remoteSdp) {
+        startCallButton.style.display = 'none';
 
         const peer2 = new window.SimplePeer({ initiator: false,  stream: webcamStream, trickle: false });
 
         peer2.signal(remoteSdp);
         peer2.on('signal', sdp => {
             if (callAnswered) return;
-            console.log('peer2 sdp');
             socket.emit('answerCall', JSON.stringify(sdp));
         });
 
 
         peer2.on('stream', stream => {
-            console.log('peer2 received stream');
             window.attachStreamToVideo(stream, remoteVideo)
         })
-    });
+    }
+
+
+    socket.on('callStarted', answerCall);
 });
