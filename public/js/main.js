@@ -16,20 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let callAnswered = false;
 
     startCall.addEventListener('click', event => {
-        const caller = new window.SimplePeer({ initiator: true, stream: webcamStream, trickle: false, });
+        const peer1 = new window.SimplePeer({ initiator: true, stream: webcamStream, trickle: false, });
 
-        caller.on('signal', sdp => {
+        peer1.on('signal', sdp => {
             if (callAnswered) return;
-            console.log('caller sdp');
+            console.log('peer1 sdp');
             socket.emit('startCall', JSON.stringify(sdp));
         });
 
         socket.on('callAnswered', remoteSdp => {
-            caller.signal(remoteSdp);
+            peer1.signal(remoteSdp);
             callAnswered = true;
         });
 
-        caller.on('stream', stream => {
+        peer1.on('stream', stream => {
             console.log('caller received stream');
             window.attachStreamToVideo(stream, remoteVideo);
         })
@@ -39,18 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('callStarted', remoteSdp => {
         startCall.style.display = 'none';
 
-        const callee = new window.SimplePeer({ initiator: false,  stream: webcamStream, trickle: false });
+        const peer2 = new window.SimplePeer({ initiator: false,  stream: webcamStream, trickle: false });
 
-        callee.signal(remoteSdp);
-        callee.on('signal', sdp => {
+        peer2.signal(remoteSdp);
+        peer2.on('signal', sdp => {
             if (callAnswered) return;
-            console.log('callee sdp');
+            console.log('peer2 sdp');
             socket.emit('answerCall', JSON.stringify(sdp));
         });
 
 
-        callee.on('stream', stream => {
-            console.log('callee received stream');
+        peer2.on('stream', stream => {
+            console.log('peer2 received stream');
             window.attachStreamToVideo(stream, remoteVideo)
         })
     });
