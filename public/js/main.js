@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let webcamStream = null;
 
-
     window.getWebcam({ video: true, audio: false }).then(stream => {
         webcamStream = stream;
         window.attachStreamToVideo(stream, localVideo);
@@ -18,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startCallButton.addEventListener('click', startCall);
 
     function startCall() {
+        startCallButton.style.display = 'none';
         const peer1 = new window.SimplePeer({ initiator: true, stream: webcamStream, trickle: false, });
 
         peer1.on('signal', sdp => {
