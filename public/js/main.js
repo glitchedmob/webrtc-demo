@@ -42,10 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         peer2.signal(remoteSdp);
         peer2.on('signal', sdp => {
-            if (callAnswered) return;
             socket.emit('answerCall', JSON.stringify(sdp));
         });
-
 
         peer2.on('stream', stream => {
             window.attachStreamToVideo(stream, remoteVideo);
