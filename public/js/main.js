@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startCall() {
         startCallButton.style.display = 'none';
-        const peer1 = new window.SimplePeer({ initiator: true, stream: webcamStream, trickle: false, });
+        const peer1 = new window.SimplePeer({ initiator: true, stream: webcamStream });
 
         peer1.on('signal', sdp => {
             if (callAnswered) return;
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function answerCall(remoteSdp) {
         startCallButton.style.display = 'none';
 
-        const peer2 = new window.SimplePeer({ initiator: false,  stream: webcamStream, trickle: false });
+        const peer2 = new window.SimplePeer({ initiator: false,  stream: webcamStream });
 
         peer2.signal(remoteSdp);
         peer2.on('signal', sdp => {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         peer2.on('stream', stream => {
-            window.attachStreamToVideo(stream, remoteVideo)
+            window.attachStreamToVideo(stream, remoteVideo);
         })
     }
 
