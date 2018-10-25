@@ -6,15 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let webcamStream = null;
 
+    window.getWebcam({ video: true, audio: false }).then(stream => {
+        webcamStream = stream;
+        window.attachStreamToVideo(stream, localVideo);
+    });
+
     startCallButton.addEventListener('click', startCall);
 
     function startCall() {
+        startCallButton.style.display = 'none';
 
     }
 
     function answerCall() {
 
     }
-
-
 });
